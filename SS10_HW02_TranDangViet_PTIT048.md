@@ -1,40 +1,172 @@
-## Bài 2: Tối Ưu Hóa Prompt Đặc Tả Yêu Cầu Chức Năng
+# Bài 2: Tối Ưu Hóa Prompt Đặc Tả Yêu Cầu Chức Năng
 
-**1. Nội dung Prompt tối ưu:**
+## 1. Prompt tối ưu
 
 ```text
-Act as a Senior Business Analyst.
-Hãy viết tài liệu Đặc tả Yêu cầu chức năng (Functional Requirements) cho module Đăng nhập của dự án "Shop AI".
-Hệ thống hiện tại đang sử dụng chuẩn bảo mật JWT (JSON Web Token) để quản lý phiên làm việc và áp dụng mô hình phân quyền RBAC (Role-Based Access Control) để quản trị quyền truy cập.
-Yêu cầu bắt buộc phải đặc tả chi tiết cách hệ thống xử lý 3 trường hợp ngoại lệ sau:
+# Vai trò (Role)
+Act as a Senior System Analyst có nhiều kinh nghiệm xây dựng tài liệu SRS và Functional Requirements cho các hệ thống thương mại điện tử sử dụng Spring Boot, JWT Authentication và RBAC.
+
+# Mục tiêu (Objective)
+Hãy xây dựng tài liệu Functional Requirements cho module Authentication (Đăng nhập) của dự án Shop AI. Tài liệu cần mô tả đầy đủ các yêu cầu chức năng, luồng xử lý và các trường hợp ngoại lệ để phục vụ cho việc thiết kế, phát triển và kiểm thử hệ thống.
+
+# Ngữ cảnh (Context)
+Hệ thống Shop AI sử dụng:
+- JWT (JSON Web Token) để xác thực người dùng.
+- RBAC (Role-Based Access Control) để phân quyền.
+- Người dùng đăng nhập bằng email và mật khẩu.
+- Sau khi đăng nhập thành công, hệ thống sinh Access Token để người dùng truy cập các chức năng theo đúng vai trò.
+- Các vai trò gồm: Admin, Staff và Customer.
+
+# Ràng buộc (Constraints)
+Tài liệu phải mô tả đầy đủ:
+- Điều kiện trước khi thực hiện đăng nhập.
+- Luồng xử lý chính của chức năng đăng nhập.
+- Điều kiện sau khi đăng nhập thành công.
+- Quy tắc xác thực thông tin đăng nhập.
+- Quy tắc phân quyền bằng RBAC.
+- Thông báo lỗi tương ứng cho từng trường hợp.
+
+Bắt buộc phải đặc tả cách hệ thống xử lý các trường hợp ngoại lệ sau:
 1. Người dùng nhập sai mật khẩu quá 5 lần.
-2. Token JWT hết hạn (expired) trong lúc phiên làm việc đang diễn ra.
-3. Tài khoản người dùng ở trạng thái khóa (Inactive) nhưng cố tình thực hiện đăng nhập.
-Trình bày tài liệu dưới định dạng Markdown, chia thành các phần rõ ràng: Tổng quan, Luồng chính, và Bảng xử lý ngoại lệ để dễ theo dõi.
+2. Token JWT hết hạn (Expired) trong khi phiên làm việc đang diễn ra.
+3. Tài khoản người dùng ở trạng thái Inactive nhưng vẫn cố gắng đăng nhập.
+
+Không bỏ sót bất kỳ trường hợp ngoại lệ nào.
+
+# Định dạng (Format)
+Xuất kết quả bằng Markdown với các mục:
+1. Functional Overview
+2. Actors
+3. Preconditions
+4. Functional Requirements
+5. Main Flow
+6. Business Rules
+7. Exception Handling
+8. Postconditions
+9. Acceptance Criteria
 ```
 
-**2. Tài liệu Functional Requirements do AI sinh ra (chạy thử với prompt trên):**
+---
 
-```markdown
-# Yêu Cầu Chức Năng (Functional Requirements) - Module Đăng Nhập (Shop AI)
+## 2. Functional Requirements do AI sinh ra
 
-## 1. Tổng Quan (Overview)
+```text
+# Functional Requirements – Authentication Module
 
-Module Đăng nhập đảm nhận vai trò xác thực danh tính người dùng truy cập vào hệ thống Shop AI. Hệ thống sử dụng cơ chế JSON Web Token (JWT) để duy trì phiên làm việc không trạng thái (stateless) và áp dụng Role-Based Access Control (RBAC) để xác định quyền hạn người dùng sau khi đăng nhập thành công.
+## 1. Functional Overview
 
-## 2. Luồng Nghiệp Vụ Chính (Main Flow)
+Module Authentication cho phép người dùng đăng nhập vào hệ thống Shop AI bằng email và mật khẩu. Sau khi xác thực thành công, hệ thống cấp JWT để người dùng truy cập các chức năng theo quyền được cấp thông qua RBAC.
 
-1. Người dùng nhập thông tin `Email` và `Password` tại giao diện Đăng nhập.
-2. Client mã hóa và gửi dữ liệu lên API Endpoint `/api/auth/login`.
-3. Hệ thống kiểm tra tính hợp lệ của dữ liệu và đối chiếu với cơ sở dữ liệu.
-4. Nếu thông tin khớp và tài khoản hợp lệ, hệ thống tạo ra một `Access Token` và `Refresh Token` chứa thông tin người dùng và danh sách Roles (Quyền hạn).
-5. Hệ thống trả về token cho Client. Client lưu token an toàn và điều hướng người dùng tới trang tương ứng theo Role.
+---
 
-## 3. Xử Lý Các Trường Hợp Ngoại Lệ (Edge Cases)
+## 2. Actors
 
-| Tình huống ngoại lệ                               | Xử lý của hệ thống (System Response)                                                                                                                                      | Trải nghiệm người dùng (UX)                                                                                                                                                                            |
-| :------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. Nhập sai mật khẩu quá 5 lần**                | Hệ thống ghi nhận số lần sai. Nếu vượt quá 5 lần, chuyển trạng thái tài khoản sang khóa tạm thời trong 15-30 phút. Gửi cảnh báo bảo mật qua email của người dùng.         | Hiển thị thông báo: _"Tài khoản của bạn đã bị khóa tạm thời do nhập sai mật khẩu quá nhiều lần. Vui lòng thử lại sau 30 phút hoặc sử dụng tính năng Quên mật khẩu."_                                   |
-| **2. Token JWT hết hạn lúc phiên đang diễn ra**   | Khi API trả về HTTP Status `401 Unauthorized` do Access Token hết hạn, Client tự động gọi API `/api/auth/refresh` ngầm kèm theo Refresh Token để cấp Access Token mới.    | Nếu lấy token mới thành công, người dùng **không bị gián đoạn** thao tác. Nếu Refresh Token cũng hết hạn, hệ thống buộc đăng xuất, yêu cầu đăng nhập lại, lưu trạng thái trang để quay về thao tác cũ. |
-| **3. Tài khoản Inactive nhưng cố tình đăng nhập** | Dù mật khẩu chính xác, khi kiểm tra status của user là `Inactive`, hệ thống từ chối sinh token, trả về HTTP Status `403 Forbidden` và ghi log nỗ lực đăng nhập trái phép. | Hiển thị thông báo: _"Tài khoản của bạn đang bị khóa hoặc chưa được kích hoạt. Vui lòng liên hệ Bộ phận CSKH để được hỗ trợ."_                                                                         |
+- Admin
+- Staff
+- Customer
+
+---
+
+## 3. Preconditions
+
+- Người dùng đã có tài khoản.
+- Tài khoản tồn tại trong cơ sở dữ liệu.
+- Hệ thống Authentication đang hoạt động.
+- Người dùng có kết nối mạng.
+
+---
+
+## 4. Functional Requirements
+
+### FR-01 Đăng nhập
+
+- Hệ thống cho phép người dùng nhập email và mật khẩu.
+- Hệ thống kiểm tra dữ liệu đầu vào.
+- Hệ thống xác thực thông tin đăng nhập.
+- Nếu hợp lệ, hệ thống sinh JWT.
+- JWT chứa thông tin định danh và vai trò của người dùng.
+- Hệ thống trả về Access Token cho client.
+
+### FR-02 Phân quyền
+
+- Sau khi đăng nhập thành công, hệ thống xác định vai trò người dùng.
+- Người dùng chỉ được truy cập các chức năng được phép theo RBAC.
+- Nếu truy cập trái quyền, hệ thống từ chối yêu cầu.
+
+---
+
+## 5. Main Flow
+
+1. Người dùng nhập email và mật khẩu.
+2. Hệ thống kiểm tra dữ liệu đầu vào.
+3. Hệ thống tìm tài khoản theo email.
+4. Kiểm tra trạng thái tài khoản.
+5. Kiểm tra mật khẩu.
+6. Xác định vai trò người dùng.
+7. Sinh JWT.
+8. Trả Access Token.
+9. Người dùng sử dụng JWT để truy cập hệ thống.
+
+---
+
+## 6. Business Rules
+
+- Email phải tồn tại.
+- Mật khẩu phải chính xác.
+- JWT phải còn hiệu lực.
+- RBAC được áp dụng cho mọi yêu cầu.
+- Chỉ tài khoản Active mới được đăng nhập.
+
+---
+
+## 7. Exception Handling
+
+### EX-01 Sai mật khẩu quá 5 lần
+
+- Hệ thống tăng bộ đếm số lần đăng nhập sai.
+- Khi vượt quá 5 lần liên tiếp:
+  - Khóa tạm thời tài khoản hoặc yêu cầu xác minh theo chính sách bảo mật.
+  - Từ chối các lần đăng nhập tiếp theo.
+  - Ghi log sự kiện bảo mật.
+  - Thông báo người dùng tài khoản đã bị khóa tạm thời.
+
+### EX-02 JWT hết hạn
+
+- Khi JWT hết hạn trong phiên làm việc:
+  - Hệ thống từ chối yêu cầu.
+  - Trả về lỗi Unauthorized (401).
+  - Yêu cầu người dùng đăng nhập lại để nhận JWT mới.
+  - Không cho phép tiếp tục sử dụng token đã hết hạn.
+
+### EX-03 Tài khoản Inactive
+
+- Nếu tài khoản ở trạng thái Inactive:
+  - Hệ thống từ chối đăng nhập.
+  - Không sinh JWT.
+  - Không tạo phiên làm việc.
+  - Thông báo tài khoản đã bị khóa hoặc chưa được kích hoạt.
+
+---
+
+## 8. Postconditions
+
+Nếu đăng nhập thành công:
+- JWT được tạo.
+- Người dùng được xác thực.
+- Quyền truy cập được áp dụng theo RBAC.
+
+Nếu đăng nhập thất bại:
+- Không tạo JWT.
+- Không tạo phiên làm việc.
+- Hệ thống ghi nhận thông tin phục vụ giám sát bảo mật.
+
+---
+
+## 9. Acceptance Criteria
+
+- Người dùng hợp lệ đăng nhập thành công và nhận JWT.
+- Người dùng sai mật khẩu quá 5 lần bị xử lý theo chính sách bảo mật.
+- JWT hết hạn không được phép tiếp tục sử dụng.
+- Tài khoản Inactive không thể đăng nhập.
+- RBAC được áp dụng chính xác cho mọi vai trò.
 ```
